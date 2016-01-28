@@ -18,6 +18,7 @@
 @interface SQChatVC : UIViewController
 @property (strong, nonatomic) IBOutlet UITableView *chatTableView;
 @property (nonatomic, strong) NSMutableArray *rowData;
+@property (nonatomic, strong, readonly) NSString *chatter;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic) BOOL inInvisble;
 @property (nonatomic, assign) id <SQChatViewDelegate> delegate;
@@ -25,7 +26,7 @@
 - (void)hideImagePicker;
 
 - (void)sendTextMessage:(NSString *)textMessage;
-- (void)sendImageMessage:(NSString *)image;
+- (void)sendImageMessage:(UIImage *)image;
 - (void)sendLocationLatitude:(double)latitude
                    longitude:(double)longitude
                   addAddress:(NSString *)address;

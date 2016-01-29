@@ -19,7 +19,7 @@
 #import "ChatSendHelper.h"
 
 #import "CLMessageTooBar.h"
-@class MessageModelManager;
+
 
 #define LP_PAGECOUNT 20
 #define SELF_HEIGHT  self.view.frame.size.height
@@ -168,13 +168,18 @@ CLMessageTooBarDelegate, LocationViewDelegate>
 //    [[EaseMob sharedInstance].callManager removeDelegate:self];
 //    [[EaseMob sharedInstance].callManager addDelegate:self delegateQueue:nil];
     isScorllTobtn = YES;
+    [self.view addSubview:self.chatToolBar];
+    [self setupBarButtonItem];
+    if ([self.chatToolBar.moreView isKindOfClass:[LCChatBarMoreView class]]) {
+        [(LCChatBarMoreView *)self.chatToolBar.moreView setDelegate:self];
+    }
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(keyboardHidden)];
     [self.view addGestureRecognizer:tap];
     //通过会话接受管理者已发送的消息
    // long long timeTamp = [[NSDate date]timeIntervalSince1970] * 1000 +1;
    // [self loadMoreMessageFrom:timeTamp count:LP_PAGECOUNT apped:NO];
     
-    
+ 
     // 通知
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(removeAllMessage:)
@@ -216,12 +221,24 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     }
     
 }
+- (void)setupBarButtonItem
+{
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backItem];
+    
+    UIButton *clearButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    [clearButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
+    [clearButton addTarget:self action:@selector(removeAllMessage:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:clearButton];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    //self.sendMessageField.kbMoving.offset = 100;
-    //self.sendMessageField.kbMoving.kbMovingView = self.view;
     
 
 }

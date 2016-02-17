@@ -16,7 +16,7 @@
 
 @end
 @interface SQChatVC : UIViewController
-@property (strong, nonatomic) IBOutlet UITableView *chatTableView;
+@property (nonatomic, strong) UITableView *chatTableView;
 @property (nonatomic, strong) NSMutableArray *rowData;
 @property (nonatomic, strong, readonly) NSString *chatter;
 @property (nonatomic, strong) NSMutableArray *dataSource;

@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "XHMessageTextView.h"
+#import "LCChatBarMoreView.h"
 
+#import "DXFaceView.h"
 #define INPUT_TEXTVIEW_MIN_HEIGHT 36
 #define INPUT_TEXTVIEW_MAX_HEIGHT 200
 #define HORIZONTAL_PADDING 8
@@ -25,6 +27,8 @@
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) XHMessageTextView *inputTextView;
 @property (nonatomic) CGFloat maxTextInputViewHeight;
+@property (nonatomic, strong) UIView *faceView;
+@property (nonatomic, strong) UIView *recordView;
 
 
 

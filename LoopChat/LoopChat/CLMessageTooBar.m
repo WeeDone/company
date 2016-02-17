@@ -7,8 +7,8 @@
 //
 
 #import "CLMessageTooBar.h"
-#import "DXChatBarMoreView.h"
-@interface CLMessageTooBar() <UITextViewDelegate>
+
+@interface CLMessageTooBar() <UITextViewDelegate, DXFaceDelegate>
 {
     CGFloat _previousTextViewContentHeight;
 }
@@ -32,7 +32,7 @@
     }
     self = [super initWithFrame:frame];
     if (self) {
-
+        [self setupConfigure];
     }
     return self;
 }
@@ -152,24 +152,7 @@
 {
     [self willShowInputTextViewToHeight:[self getTextViewContentH:textView]];
 }
-#pragma mark - DXFaceDelegate
 
-- (void)selectedFacialView:(NSString *)str isDelete:(BOOL)isDelete
-{
-    NSString *chatText = self.inputTextView.text;
-    
-    if (!isDelete && str.length > 0) {
-        self.inputTextView.text = [NSString stringWithFormat:@"%@%@",chatText,str];
-    }
-    else {
-        
-        if (chatText.length > 0) {
-            self.inputTextView.text = [chatText substringToIndex:chatText.length-1];
-        }
-    }
-    
-    [self textViewDidChange:self.inputTextView];
-}
 #pragma mark - private
 
 /**
@@ -194,26 +177,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
-#pragma mark - UIKeyboardNotification
-
-- (void)keyboardWillChangeFrame:(NSNotification *)notification
-{
-    NSDictionary *userInfo = notification.userInfo;
-    CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
-    void(^animations)() = ^{
-        [self willShowKeyboardFromFrame:beginFrame toFrame:endFrame];
-    };
-    
-    void(^completion)(BOOL) = ^(BOOL finished){
-    };
-    
-    [UIView animateWithDuration:duration delay:0.0f options:(curve << 16 | UIViewAnimationOptionBeginFromCurrentState) animations:animations completion:completion];
-}
-
 - (void)setupSubviews
 {
     CGFloat allButtonWidth = 0.0;
@@ -231,7 +194,7 @@
     [self.styleChangeButton setImage:[UIImage imageNamed:@"chatBar_keyboard"]
                             forState:UIControlStateSelected];
     [self.styleChangeButton addTarget:self action:@selector(buttonAction:)
-                                 forControlEvents:UIControlEventTouchUpInside];
+                     forControlEvents:UIControlEventTouchUpInside];
     self.styleChangeButton.tag = 0;
     allButtonWidth += CGRectGetMaxX(self.styleChangeButton.frame);
     textViewLeftMargin += CGRectGetMaxX(self.styleChangeButton.frame);
@@ -285,16 +248,16 @@
     _inputTextView.layer.cornerRadius = 6.0f;
     _previousTextViewContentHeight = [self getTextViewContentH:_inputTextView];
     
- 
+    
     
     if (!self.moreView) {
-        self.moreView = [[DXChatBarMoreView alloc] initWithFrame:CGRectMake(0, (VERTICAL_PADDING * 2 + INPUT_TEXTVIEW_MIN_HEIGHT), self.frame.size.width, 80) type:ChatMoreTypeGroupChat];
+        self.moreView = [[LCChatBarMoreView alloc] initWithFrame:CGRectMake(0, (VERTICAL_PADDING * 2 + INPUT_TEXTVIEW_MIN_HEIGHT), self.frame.size.width, 80) type:ChatMoreTypeGroupChat];
         self.moreView.backgroundColor = [UIColor lightGrayColor];
         self.moreView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     }
     
     
-
+    
     
     [self.tooBarView  addSubview:self.styleChangeButton];
     [self.tooBarView addSubview:self.moreButton];
@@ -302,6 +265,27 @@
     [self.tooBarView addSubview:self.inputTextView];
     [self.tooBarView addSubview:self.recodButton];
 }
+#pragma mark - UIKeyboardNotification
+
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    void(^animations)() = ^{
+        [self willShowKeyboardFromFrame:beginFrame toFrame:endFrame];
+    };
+    
+    void(^completion)(BOOL) = ^(BOOL finished){
+    };
+    
+    [UIView animateWithDuration:duration delay:0.0f options:(curve << 16 | UIViewAnimationOptionBeginFromCurrentState) animations:animations completion:completion];
+}
+
+
 - (void)buttonAction:(id)sender
 {
     UIButton *button = (UIButton *)sender;
@@ -399,7 +383,38 @@
             break;
     }
 }
-
+#pragma mark - DXFaceDelegate
+- (void)sendFace
+{
+    NSString *chatText = self.inputTextView.text;
+    if (chatText.length > 0) {
+        if ([self.delagate respondsToSelector:@selector(didSendText:)]) {
+            [self.delagate didSendText:chatText];
+            self.inputTextView.text = @"";
+            [self willShowInputTextViewToHeight:[self getTextViewContentH:self.inputTextView]];
+        }
+    }
+}
+- (void)selectedFacialView:(NSString *)str
+                  isDelete:(BOOL)isDelete
+{
+    NSString *chatText = self.inputTextView.text;
+    if (!isDelete && str.length > 0) {
+        self.inputTextView.text = [NSString stringWithFormat:@"%@%@",chatText, str];
+    } else if (chatText.length > 2) {
+        NSString *subStr = [chatText substringFromIndex:chatText.length -2];
+        if ([(DXFaceView *)self.faceView stringIsFace:subStr]) {
+            self.inputTextView.text = [chatText substringFromIndex:chatText.length - 2];
+            [self textViewDidChange:self.inputTextView];
+            return;
+        }
+        if (chatText.length > 0 ) {
+            self.inputTextView.text = [chatText substringFromIndex:chatText.length - 1];
+        }
+    }
+    [self textViewDidChange:self.inputTextView];
+    
+}
 #pragma mark - change frame
 
 - (void)willShowBottomHeight:(CGFloat)bottomHeight
@@ -521,7 +536,7 @@
 }
 + (CGFloat)defalutHeight
 {
-    return VERTICAL_PADDING *2 + INPUT_TEXTVIEW_MIN_HEIGHT;
+    return VERTICAL_PADDING * 2 + INPUT_TEXTVIEW_MIN_HEIGHT;
 }
 
 @end

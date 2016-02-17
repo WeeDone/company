@@ -17,12 +17,13 @@
 #import "EMChatViewCell.h"
 #import "LCChatBarMoreView.h"
 #import "ChatSendHelper.h"
-
 #import "CLMessageTooBar.h"
 
 
 #define LP_PAGECOUNT 20
 #define SELF_HEIGHT  self.view.frame.size.height
+#define SELF_WIDTH  self.view.frame.size.width
+#define CHAT_BAR_HEIGHT self.chatToolBar.frame.size.height
 @interface SQChatVC ()<UITableViewDelegate, UITableViewDataSource,
 UINavigationControllerDelegate, IChatManagerDelegate, UITextFieldDelegate ,
 UIImagePickerControllerDelegate, EMCallManagerDelegate, LCChatBarMoreViewDelegate,
@@ -38,7 +39,7 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     BOOL isScorllTobtn;
 }
 
-@property (strong, nonatomic) IBOutlet UITextField *sendMessageField;
+
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic) BOOL   isChatGroup;
 @property (nonatomic, strong) NSDate *chatDate;
@@ -46,10 +47,10 @@ CLMessageTooBarDelegate, LocationViewDelegate>
 @property (nonatomic, strong) CLMessageTooBar *chatToolBar;
 @property (nonatomic, strong) MessageReadManager *messageRead;
 @property (nonatomic, strong) EMConversation *conversation;
-@property (nonatomic) EMConversationType conversationType;
 @property (nonatomic, strong) NSMutableArray *messagess;
 @property (nonatomic) BOOL   isScollToBtn;
 @property (nonatomic) BOOL  isKicked;
+@property (nonatomic)  EMConversationType conversationType;
 @end
 
 @implementation SQChatVC
@@ -63,6 +64,8 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     return self;
     
 }
+
+
 - (instancetype)initWithNibChatter:(NSString *)chatter conversaionType:(EMConversationType)type
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -96,7 +99,40 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     [self.imagePicker  dismissViewControllerAnimated:YES completion:nil];
     self.inInvisble = YES;
 }
-
+- (UITableView *)chatTableView
+{
+    if (_chatTableView == nil) {
+        _chatTableView = [[UITableView alloc]initWithFrame:CGRectMake(40-self.view.frame.origin.x ,
+                                                                     self.view.frame.origin.y,
+                                                                      SELF_WIDTH -80,
+                                                                     SELF_HEIGHT - CHAT_BAR_HEIGHT)
+                                                     style:UITableViewStylePlain];
+        _chatTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        _chatTableView.delegate = self;
+        _chatTableView.dataSource = self;
+        _chatTableView.backgroundColor = RGB_COLOR(111, 39, 48, 1);
+        _chatTableView.tableFooterView = [[UIView alloc]init];
+        _chatTableView.separatorStyle = UITableViewCellSelectionStyleNone;
+        UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPress:)];
+        lpgr.minimumPressDuration = 0.5;
+        [_chatTableView addGestureRecognizer:lpgr];
+    }
+    return _chatTableView;
+}
+- (void)handleLongPress:(UILongPressGestureRecognizer *)reconizer
+{
+    if (reconizer.state == UIGestureRecognizerStateBegan && [self.dataSource count] > 0) {
+        CGPoint location = [reconizer locationInView:self.chatTableView];
+        NSIndexPath *indexPath = [self.chatTableView indexPathForRowAtPoint:location];
+        id object = [self.dataSource objectAtIndex:indexPath.row];
+        if ([object isKindOfClass:[MessageModel class]]) {
+            EMChatViewCell *cell = (EMChatViewCell *)[self.chatTableView cellForRowAtIndexPath:indexPath];
+            [cell becomeFirstResponder];
+            longPressIndexPath = indexPath;
+            [self showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.messageModel.type];
+        }
+    }
+}
 - (void)sendImageMessage:(UIImage *)image
 {
     NSDictionary *ext = nil;
@@ -136,10 +172,8 @@ CLMessageTooBarDelegate, LocationViewDelegate>
 - (CLMessageTooBar *)chatToolBar
 {
     if (!_chatToolBar) {
-        _chatToolBar = [[CLMessageTooBar alloc]initWithFrame:CGRectMake(0
-                                                                       , SELF_HEIGHT - [CLMessageTooBar defalutHeight],
-                                                                       _chatToolBar.frame.size.width
-                                                                        , 80)];
+        _chatToolBar = [[CLMessageTooBar alloc]initWithFrame:CGRectMake(0,self.view.frame.size.height - [CLMessageTooBar defalutHeight],
+                                                                        self.view.frame.size.width,[CLMessageTooBar defalutHeight])] ;
         _chatToolBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
         _chatToolBar.delagate = self;
         ChatMoreType type = self.isChatGroup == YES ? ChatMoreTypeGroupChat : ChatMoreTypeChat;
@@ -163,12 +197,17 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     if ([[[UIDevice currentDevice]systemName]floatValue] >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-//    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-//    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
-//    [[EaseMob sharedInstance].callManager removeDelegate:self];
-//    [[EaseMob sharedInstance].callManager addDelegate:self delegateQueue:nil];
+    message_quque = dispatch_queue_create("LoopChat.com", NULL);
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+  //  [[EaseMob sharedInstance].callManager removeDelegate:self];
+   // [[EaseMob sharedInstance].callManager addDelegate:self delegateQueue:nil];
     isScorllTobtn = YES;
-    [self.view addSubview:self.chatToolBar];
+    [self.view addSubview:self.chatTableView];
+
+    [self.view addSubview:_chatToolBar];
+    
+
     [self setupBarButtonItem];
     if ([self.chatToolBar.moreView isKindOfClass:[LCChatBarMoreView class]]) {
         [(LCChatBarMoreView *)self.chatToolBar.moreView setDelegate:self];
@@ -176,9 +215,10 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(keyboardHidden)];
     [self.view addGestureRecognizer:tap];
     //通过会话接受管理者已发送的消息
-   // long long timeTamp = [[NSDate date]timeIntervalSince1970] * 1000 +1;
-   // [self loadMoreMessageFrom:timeTamp count:LP_PAGECOUNT apped:NO];
     
+    long long timeTamp = [[NSDate date]timeIntervalSince1970] * 1000 +1;
+   [self loadMoreMessageFrom:timeTamp count:LP_PAGECOUNT apped:NO];
+   
  
     // 通知
     [[NSNotificationCenter defaultCenter]addObserver:self
@@ -210,7 +250,15 @@ CLMessageTooBarDelegate, LocationViewDelegate>
         self.chatTableView.separatorStyle = NO;
     // Do any additional setup after loading the view.
 }
-
+#pragma mark - LCMessageTool Bar Delegate
+- (void)inputTextViewDidBeginEditing:(XHMessageTextView *)messageInputTextView
+{
+    
+}
+- (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView
+{
+    [menuController setMenuItems:nil];
+}
 - (void)handlerCallNotification:(NSNotification *)notification
 {
     id obj = notification.object;
@@ -219,6 +267,17 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     } else {
         self.inInvisble = NO;
     }
+    
+}
+- (void)didChangeFrameToHeigh:(CGFloat)toHeight
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect rect = self.chatTableView.frame;
+        rect.origin.y = 0;
+        rect.size.height = self.view.frame.size.height  - toHeight;
+        self.chatToolBar.frame = rect;
+    }];
+    [self scrollViewToButtom:NO];
     
 }
 - (void)setupBarButtonItem
@@ -341,6 +400,7 @@ CLMessageTooBarDelegate, LocationViewDelegate>
     __weak SQChatVC *weakSelf = self;
     dispatch_sync(message_quque, ^{
 #warning dismiss message for Array
+
      dispatch_sync(dispatch_get_main_queue(), ^{
 
          [weakSelf.dataSource addObjectsFromArray:(NSArray *)message];
@@ -385,17 +445,19 @@ CLMessageTooBarDelegate, LocationViewDelegate>
 {
     return 1;
 }
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
     return self.dataSource.count;
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.chatTableView = tableView;
     
     if (indexPath.row < [self.dataSource count]) {
        // id obj = [self.dataSource objectAtIndex:indexPath.row];
-        id obj = self.sendMessageField.text;
+        id obj = [self.dataSource objectAtIndex:indexPath.row];
         if ([obj isKindOfClass:[NSString class]]) {
             EMChatTimeCell *timeCell = [tableView dequeueReusableCellWithIdentifier:@"chatMessageCell"];
             if (timeCell == nil) {
@@ -490,6 +552,7 @@ completion:^(EMChatroom *chatroom, EMError *error) {
     }
 }
 #pragma mark - IChatManagerDelegate
+
 - (void)didSendMessage:(EMMessage *)message error:(EMError *)error
 {
     [self.dataSource enumerateObjectsUsingBlock:^(id   obj, NSUInteger idx, BOOL *stop) {
@@ -502,6 +565,12 @@ completion:^(EMChatroom *chatroom, EMError *error) {
         }
     }];
     [self.chatTableView reloadData];
+}
+- (void)didSendText:(NSString *)text
+{
+    if (text && text.length > 0) {
+        [self sendTextMessage:text];
+    }
 }
 - (void)didReceiveHasDeliveredResponse:(EMReceipt *)resp
 {
@@ -590,7 +659,7 @@ completion:^(EMChatroom *chatroom, EMError *error) {
 
 
 
-#warning miss method for LCChatBarMoreView
+
 
 
 - (void)didReceiveCmdMessage:(EMMessage *)cmdMessage
@@ -620,7 +689,6 @@ completion:^(EMChatroom *chatroom, EMError *error) {
                                                   withRowAnimation:UITableViewRowAnimationNone];
                 });
                 if (error && error.errorCode == EMErrorMessageContainSensitiveWords) {
-                  //  CGRect frame = self.chatTableView.frame;
 
                 }
                 break;
@@ -758,7 +826,7 @@ completion:^(EMChatroom *chatroom, EMError *error) {
     
 }
 #pragma mark - private mothod
-- (BOOL)P_canRecord
+- (BOOL)P_CanRecord
 {
     __block BOOL canBeRecord = YES;
     if ([[[UIDevice currentDevice]systemVersion]compare:@"9.1"] != NSOrderedAscending) {
@@ -770,6 +838,17 @@ completion:^(EMChatroom *chatroom, EMError *error) {
         }
     }
     return canBeRecord;
+}
+- (void)didStyleChangeToRecord:(BOOL)changeToRecord
+{
+    
+}
+- (void)P_ScrollviewToBottonm:(BOOL)animated
+{
+    if (self.chatTableView.contentSize.height > self.chatTableView.frame.size.height) {
+        CGPoint offset = CGPointMake(0, self.chatTableView.contentSize.height - self.chatTableView.frame.size.height);
+        [self.chatTableView setContentOffset:offset animated:animated];
+    }
 }
 - (void)markMessageAsRead:(NSArray *)messageReads
 {
@@ -876,6 +955,12 @@ completion:^(EMChatroom *chatroom, EMError *error) {
     [self presentViewController:self.imagePicker animated:YES completion:nil];
     self.inInvisble = YES;
 }
+- (void)exitGroup
+{
+    [self.navigationController popToViewController:self animated:NO];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma  mark - LocationContrller Delegate 
 - (void)sendLocationLatitude:(double)latitude longitude:(double)longitude andAddress:(NSString *)address
 {
@@ -908,6 +993,19 @@ completion:^(EMChatroom *chatroom, EMError *error) {
     [super viewWillAppear:animated];
     [_conversation markAllMessagesAsRead:YES];
     self.inInvisble = YES;
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_conversation markAllMessagesAsRead:YES];
+    self.inInvisble = YES;
+}
+- (BOOL)shouldMarkMessageAsRead
+{
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground || self.inInvisble) {
+        return NO;
+    }
+    return YES;
 }
 - (void)dealloc
 {
@@ -952,6 +1050,20 @@ completion:^(EMChatroom *chatroom, EMError *error) {
             [self sendHasReadResponseForMessages:unreadMessages];
         }
         [_conversation markAllMessagesAsRead:YES];
+    }
+}
+#pragma mark - EMChatManagerChatRoomDelegate
+- (void)chatroom:(EMChatroom *)chatroom occupantDidJoin:(NSString *)username
+{
+    CGRect frame = self.chatToolBar.frame;
+    
+}
+- (void)beKickedOutFromChatroom:(EMChatroom *)chatroom reason:(EMChatroomBeKickedReason)reason
+{
+    if ([_chatter isEqualToString:chatroom.chatroomId]) {
+        _isKicked = YES;
+        //CGRect frame = self.chatToolBar.frame;
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

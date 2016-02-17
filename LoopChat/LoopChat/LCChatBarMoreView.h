@@ -37,7 +37,7 @@ typedef enum{
 
 @protocol LCChatBarMoreViewDelegate <NSObject>
 
-@required
+
 - (void)moreViewTakePicAction:(LCChatBarMoreView *)moreView;
 - (void)moreViewPhotoAction:(LCChatBarMoreView *)moreView;
 - (void)moreViewLocationAction:(LCChatBarMoreView *)moreView;

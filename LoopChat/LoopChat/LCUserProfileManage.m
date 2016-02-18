@@ -153,8 +153,121 @@ static LCUserProfileManage *sharedInstance = nil;
 - (void)updateUserProfileInBackground:(NSDictionary *)param
                            completion:(void (^)(BOOL, NSError *))completion
 {
-    
+    if (_objectID && _objectID.length > 0) {
+        PFObject *object = [PFObject objectWithoutDataWithClassName:LC_RARSE_USER objectId:_objectID];
+        if (param != nil && [[param allKeys] count] > 0) {
+            for (NSString *key in param) {
+                [object setObject:[param objectForKey:key] forKey:key];
+            }
+        }
+        __weak PFObject *weakObj = object;
+        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (completion) {
+                if (succeeded) {
+                    [self P_SavePFUserInDisk:weakObj];
+                }
+                completion(succeeded, error);
+            }
+        }];
+    } else {
+        [self queryPFObjectWithComlpetion:^(PFObject *object, NSError *error) {
+            if (object) {
+            if (param != nil && [[param allKeys]count] > 0) {
+                for (NSString *key in param) {
+                    [object setObject:[param objectForKey:key] forKey:key];
+                }
+            }
+                __weak PFObject *weakObj = object;
+                [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (completion) {
+                        if (succeeded) {
+                            [self P_SavePFUserInDisk:weakObj];
+                        }
+                        completion(succeeded, error);
+                    }
+                    
+                }];
+            } else {
+                if (completion) {
+                    completion(NO, error);
+                }
+            }
+        }];
+    }
+         
 }
+- (void)loadUserProfileInBackground:(NSArray *)buddyList
+                        saveToLocal:(BOOL)save
+                         completion:(void (^)(BOOL, NSError *))completion
+{
+    NSMutableArray *username = [NSMutableArray array];
+    for (EMBuddy *buddy in buddyList) {
+        if ([buddy.username length]) {
+            if (![self getUserProfileByUsername:buddy.username]) {
+                [username addObject:buddy.username];
+            }
+        }
+    } if ([username count] == 0) {
+        if (completion) {
+            completion(YES, nil);
+        }
+        return;
+    }
+
+}
+- (void)loadUserProfileInbackground:(NSArray *)username
+                       saveToLoacal:(BOOL)save
+                         completion:(void (^)(BOOL, NSError *))completion
+{
+    PFQuery *query = [PFQuery queryWithClassName:LC_PARSE_USERNAME];
+    [query whereKey:LC_PARSE_USERNAME containedIn:username];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        if (!error) {
+            for (id user in objects) {
+                if ([user isKindOfClass:[PFObject class]]) {
+                    PFObject *pfUser = (PFObject *)user;
+                    if (save) {
+                        [self P_SavePFUserInDisk:pfUser];
+                    } else {
+                        [self P_SavePFUserInMemory:pfUser];
+                    }
+                }
+            } if (completion) {
+                completion(YES, nil);
+            }
+        }   else {
+                if (completion) {
+                    completion(NO, error);
+                }
+
+            }
+    }];
+}
+- (UserProfileEntity *)getUserProfileByUsername:(NSString *)username
+{
+    if ([_users objectForKey:username]) {
+        return [_users objectForKey:username];
+    }
+    return nil;
+}
+- (UserProfileEntity *)getCulUserProfile
+{
+    if ([_users objectForKey:LC_PARSE_USERNAME]) {
+        return [_users objectForKey:LC_PARSE_USERNAME];
+    }
+    return nil;
+}
+
+- (NSString *)getNickNmaeWithUsername:(NSString *)username
+{
+    UserProfileEntity *entity = [self getUserProfileByUsername:username];
+    if (entity.nickName && entity.nickName.length >0 ) {
+        return entity.nickName;
+    } else {
+        return username;
+    }
+}
+
 #pragma mark - private 
 
 - (void)P_SavePFUserInDisk:(PFObject *)object
@@ -172,7 +285,7 @@ static LCUserProfileManage *sharedInstance = nil;
     }
 }
 
-- (void)queryPFObjectWithComlpetion:(void(^)(PFObject *obect, NSError *error))completion
+- (void)queryPFObjectWithComlpetion:(void(^)(PFObject *object, NSError *error))completion
 {
     PFQuery *query = [PFQuery queryWithClassName:LC_RARSE_USER];
     [query whereKey:LC_PARSE_USERNAME equalTo:CURRENT_USERNAME];
@@ -191,17 +304,23 @@ static LCUserProfileManage *sharedInstance = nil;
 }
 
 
+@end
 
 
+@implementation UserProfileEntity
 
-
-
-
-
-
-
-
-
-
++ (instancetype) initWithPFObject:(PFObject *)object
+{
+    UserProfileEntity *entity = [[UserProfileEntity alloc]init];
+    entity.username = object[LC_PARSE_USERNAME];
+    entity.nickName = object[LC_PARSE_NICKNAME];
+    PFFile *userImageFile = object[LC_PARSE_USER_AVATAR];
+    if (userImageFile) {
+        entity.imageURL = userImageFile.url;
+    }
+    return entity;
+}
 
 @end
+
+

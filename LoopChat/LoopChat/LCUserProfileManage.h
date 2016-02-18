@@ -35,9 +35,13 @@
 - (void)updateUserProfileInBackground:(NSDictionary *)param
                            completion:(void (^)(BOOL success, NSError *error))completion;
 //获取用户信息
-- (void)loadUserProfileInBackground:(NSArray *)usernames
+- (void)loadUserProfileInBackground:(NSArray *)buddyList
                         saveToLocal:(BOOL)save
                          completion:(void(^)(BOOL success, NSError *error))completion;
+//获取用户信息 by username
+- (void)loadUserProfileInbackground:(NSArray *)username
+                       saveToLoacal:(BOOL)save
+                         completion:(void (^)(BOOL success, NSError *error))completion;
 //获取本地用户信息
 - (UserProfileEntity *)getUserProfileByUsername:(NSString *)username;
 // 获取当前用户信息

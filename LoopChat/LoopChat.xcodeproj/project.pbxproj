@@ -53,6 +53,8 @@
 		464438001C5CA01E007F6D5C /* EMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 464437FD1C5CA01E007F6D5C /* EMTextView.m */; };
 		464438041C5CA057007F6D5C /* FacialView.m in Sources */ = {isa = PBXBuildFile; fileRef = 464438031C5CA057007F6D5C /* FacialView.m */; };
 		464438071C5DDB18007F6D5C /* XHMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 464438061C5DDB18007F6D5C /* XHMessageTextView.m */; };
+		4673A4F91C7569BE0093C66C /* AppDelegate+Parse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4673A4F81C7569BE0093C66C /* AppDelegate+Parse.m */; };
+		4673A5191C75E6FA0093C66C /* AppDelegate+EaseMob.m in Sources */ = {isa = PBXBuildFile; fileRef = 4673A5181C75E6FA0093C66C /* AppDelegate+EaseMob.m */; };
 		46871AAA1C4D00C700E5A6E8 /* SQChatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 46871AA91C4D00C700E5A6E8 /* SQChatVC.m */; };
 		46871AB01C4D140900E5A6E8 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46871AAD1C4D140900E5A6E8 /* LocationViewController.m */; };
 		46871AB11C4D140900E5A6E8 /* LCConvertToCommonEmoticonsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 46871AAF1C4D140900E5A6E8 /* LCConvertToCommonEmoticonsHelper.m */; };
@@ -174,6 +176,10 @@
 		464438031C5CA057007F6D5C /* FacialView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacialView.m; sourceTree = "<group>"; };
 		464438051C5DDB18007F6D5C /* XHMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHMessageTextView.h; sourceTree = "<group>"; };
 		464438061C5DDB18007F6D5C /* XHMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHMessageTextView.m; sourceTree = "<group>"; };
+		4673A4F71C7569BE0093C66C /* AppDelegate+Parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Parse.h"; sourceTree = "<group>"; };
+		4673A4F81C7569BE0093C66C /* AppDelegate+Parse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Parse.m"; sourceTree = "<group>"; };
+		4673A5171C75E6FA0093C66C /* AppDelegate+EaseMob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+EaseMob.h"; sourceTree = "<group>"; };
+		4673A5181C75E6FA0093C66C /* AppDelegate+EaseMob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+EaseMob.m"; sourceTree = "<group>"; };
 		46871AA81C4D00C700E5A6E8 /* SQChatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQChatVC.h; sourceTree = "<group>"; };
 		46871AA91C4D00C700E5A6E8 /* SQChatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQChatVC.m; sourceTree = "<group>"; };
 		46871AAC1C4D140900E5A6E8 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
@@ -515,6 +521,7 @@
 				46CA53851C4A727C00FE42F5 /* LaunchScreen.storyboard */,
 				46CA53881C4A727C00FE42F5 /* Info.plist */,
 				46CA53771C4A727C00FE42F5 /* Supporting Files */,
+				4602A6951C4A809200F4751A /* image */,
 			);
 			path = LoopChat;
 			sourceTree = "<group>";
@@ -526,7 +533,10 @@
 				46CA537B1C4A727C00FE42F5 /* AppDelegate.m */,
 				46CA537D1C4A727C00FE42F5 /* ViewController.h */,
 				46CA537E1C4A727C00FE42F5 /* ViewController.m */,
-				4602A6951C4A809200F4751A /* image */,
+				4673A5171C75E6FA0093C66C /* AppDelegate+EaseMob.h */,
+				4673A5181C75E6FA0093C66C /* AppDelegate+EaseMob.m */,
+				4673A4F71C7569BE0093C66C /* AppDelegate+Parse.h */,
+				4673A4F81C7569BE0093C66C /* AppDelegate+Parse.m */,
 				46CA53781C4A727C00FE42F5 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -795,11 +805,13 @@
 				46871AD31C4D1B7F00E5A6E8 /* EMChatViewBaseCell.m in Sources */,
 				469156961C5632C100FF05FD /* SQChatVC+Category.m in Sources */,
 				464438071C5DDB18007F6D5C /* XHMessageTextView.m in Sources */,
+				4673A4F91C7569BE0093C66C /* AppDelegate+Parse.m in Sources */,
 				462B2B021C4F97FD004E3B00 /* LCChatBarMoreView.m in Sources */,
 				46DA57171C5F6A7A006316D5 /* LCUserProfileManage.m in Sources */,
 				46871AB61C4D146E00E5A6E8 /* Emoji.m in Sources */,
 				46BEB6091C525C3500FA9B14 /* UIView+LCTextInputKeyboard.m in Sources */,
 				46C2111D1C58E37700134D1C /* CLMessageTooBar.m in Sources */,
+				4673A5191C75E6FA0093C66C /* AppDelegate+EaseMob.m in Sources */,
 				46871AC81C4D1B6C00E5A6E8 /* MessageReadManager.m in Sources */,
 				46871AC91C4D1B6C00E5A6E8 /* MessageModel.m in Sources */,
 				46871ACA1C4D1B6C00E5A6E8 /* MessageModelManager.m in Sources */,
@@ -958,6 +970,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Main_PrefixHeader.pch;
 				INFOPLIST_FILE = LoopChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.XinQuan.LoopChat;
@@ -979,6 +992,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Main_PrefixHeader.pch;
 				INFOPLIST_FILE = LoopChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.XinQuan.LoopChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";

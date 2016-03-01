@@ -1,10 +1,8 @@
 PODS:
-  - EaseMobSDK (2.2.1.2)
-  - UMengAnalytics (3.6.6)
+  - EaseMobSDK (2.2.2)
 
 DEPENDENCIES:
   - EaseMobSDK (from `https://github.com/easemob/sdk-ios-cocoapods.git`)
-  - UMengAnalytics
 
 EXTERNAL SOURCES:
   EaseMobSDK:
@@ -12,11 +10,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   EaseMobSDK:
-    :commit: 7adcd89a7a1f3dc81b0cd6f28dcf28f97f4baf5c
+    :commit: 94d26ad129403f1c8b6bef1ec505f842d41be3b1
     :git: https://github.com/easemob/sdk-ios-cocoapods.git
 
 SPEC CHECKSUMS:
-  EaseMobSDK: 1e6b5a6a03c1c76e717030c726bb7757297539f8
-  UMengAnalytics: 4bf831415146b9c57cb10be65fbd43462ef8cf65
+  EaseMobSDK: c686ef0f313d14ae18df45d82b9fc3746d6354bd
 
 COCOAPODS: 0.38.2

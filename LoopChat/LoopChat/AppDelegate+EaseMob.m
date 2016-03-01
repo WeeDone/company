@@ -155,13 +155,22 @@ static const NSString *apnsCerName = @"";
 {
     UIAlertController *alertController = nil;
     if (error) {
-        alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"失败" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"提示" style:UIAlertActionStyleDefault handler:nil];
+        alertController = [UIAlertController alertControllerWithTitle:@"提示"
+                                                              message:@"失败"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"提示"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:nil];
         [alertController addAction:action];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"loginStateChange" object:@NO];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"loginStateChange"
+                                                           object:@NO];
     } else {
-        alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"等待自动登录" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"提示" style:UIAlertActionStyleDefault handler:nil];
+        alertController = [UIAlertController alertControllerWithTitle:@"提示"
+                                                              message:@"等待自动登录"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"提示"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:nil];
         [alertController addAction:action];
         
         [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
@@ -169,8 +178,36 @@ static const NSString *apnsCerName = @"";
     [alertController presentViewController:alertController animated:YES completion:nil];
 }
 
-
-
+// 接受后自动登录回调
+- (void)didAutoLoginWithInfo:(NSDictionary *)loginInfo error:(EMError *)error
+{
+    UIAlertController *alertController = nil;
+    if (error) {
+        alertController = [UIAlertController alertControllerWithTitle:@"提示"
+                                                              message:@"正在登录"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:nil];
+        [alertController addAction:action];
+    } else {
+        
+        alertController = [UIAlertController alertControllerWithTitle:@"提示"
+                                                              message:@"等待自动登录"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"提示"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:nil];
+        [alertController addAction:action];
+        
+    }
+    
+}
+//网络回调
+- (void)didConnectionStateChanged:(EMConnectionState)connectionState
+{
+    
+}
 
 
 

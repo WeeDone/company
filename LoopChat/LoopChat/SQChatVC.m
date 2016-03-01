@@ -248,6 +248,7 @@ CLMessageTooBarDelegate, LocationViewDelegate>
         [self joinCharRoom:_chatter];
     }
         self.chatTableView.separatorStyle = NO;
+    
     // Do any additional setup after loading the view.
 }
 #pragma mark - LCMessageTool Bar Delegate

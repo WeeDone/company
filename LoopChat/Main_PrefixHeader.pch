@@ -8,7 +8,9 @@
 
 #ifndef Main_PrefixHeader_pch
 #define Main_PrefixHeader_pch
+
 #import <EaseMobSDK/EaseMob.h>
+
 #import <Parse/Parse.h>
 #define USER_NAME @"userName"
 #define USER_PASSWORD @"password"

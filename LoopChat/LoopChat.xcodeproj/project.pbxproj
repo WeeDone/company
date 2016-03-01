@@ -48,6 +48,10 @@
 		4602A6E91C4A80E800F4751A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4602A6E41C4A80E800F4751A /* LoginViewController.m */; };
 		4602A6EA1C4A80E800F4751A /* DetailRegistersVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4602A6E61C4A80E800F4751A /* DetailRegistersVC.m */; };
 		4602A6EB1C4A80E800F4751A /* RegistersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4602A6E81C4A80E800F4751A /* RegistersViewController.m */; };
+		462568EC1C7734130010CDA7 /* LCMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 462568EB1C7734130010CDA7 /* LCMainVC.m */; };
+		462568F71C7735930010CDA7 /* UIImageView+HeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 462568F61C7735930010CDA7 /* UIImageView+HeadView.m */; };
+		46256AE61C7746760010CDA7 /* ChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46256AE31C7746760010CDA7 /* ChatListCell.m */; };
+		46256AE71C7746760010CDA7 /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46256AE51C7746760010CDA7 /* ChatListViewController.m */; };
 		462B2B021C4F97FD004E3B00 /* LCChatBarMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 462B2B011C4F97FD004E3B00 /* LCChatBarMoreView.m */; };
 		464437FA1C5C95B8007F6D5C /* DXFaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 464437F71C5C95B8007F6D5C /* DXFaceView.m */; };
 		464438001C5CA01E007F6D5C /* EMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 464437FD1C5CA01E007F6D5C /* EMTextView.m */; };
@@ -166,6 +170,14 @@
 		4602A6E61C4A80E800F4751A /* DetailRegistersVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailRegistersVC.m; sourceTree = "<group>"; };
 		4602A6E71C4A80E800F4751A /* RegistersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistersViewController.h; sourceTree = "<group>"; };
 		4602A6E81C4A80E800F4751A /* RegistersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistersViewController.m; sourceTree = "<group>"; };
+		462568EA1C7734130010CDA7 /* LCMainVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCMainVC.h; sourceTree = "<group>"; };
+		462568EB1C7734130010CDA7 /* LCMainVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCMainVC.m; sourceTree = "<group>"; };
+		462568F51C7735930010CDA7 /* UIImageView+HeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+HeadView.h"; sourceTree = "<group>"; };
+		462568F61C7735930010CDA7 /* UIImageView+HeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+HeadView.m"; sourceTree = "<group>"; };
+		46256AE21C7746760010CDA7 /* ChatListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListCell.h; sourceTree = "<group>"; };
+		46256AE31C7746760010CDA7 /* ChatListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListCell.m; sourceTree = "<group>"; };
+		46256AE41C7746760010CDA7 /* ChatListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListViewController.h; sourceTree = "<group>"; };
+		46256AE51C7746760010CDA7 /* ChatListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListViewController.m; sourceTree = "<group>"; };
 		462B2B001C4F97FD004E3B00 /* LCChatBarMoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatBarMoreView.h; sourceTree = "<group>"; };
 		462B2B011C4F97FD004E3B00 /* LCChatBarMoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatBarMoreView.m; sourceTree = "<group>"; };
 		464437F61C5C95B8007F6D5C /* DXFaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DXFaceView.h; sourceTree = "<group>"; };
@@ -369,9 +381,30 @@
 			path = login;
 			sourceTree = "<group>";
 		};
+		462568ED1C77351C0010CDA7 /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				46256AE21C7746760010CDA7 /* ChatListCell.h */,
+				46256AE31C7746760010CDA7 /* ChatListCell.m */,
+				46256AE41C7746760010CDA7 /* ChatListViewController.h */,
+				46256AE51C7746760010CDA7 /* ChatListViewController.m */,
+			);
+			name = ChatList;
+			sourceTree = "<group>";
+		};
+		462568F41C7735630010CDA7 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				462568F51C7735930010CDA7 /* UIImageView+HeadView.h */,
+				462568F61C7735930010CDA7 /* UIImageView+HeadView.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
 		46871AAB1C4D13FB00E5A6E8 /* ChatView */ = {
 			isa = PBXGroup;
 			children = (
+				462568ED1C77351C0010CDA7 /* ChatList */,
 				46C211251C59EF6E00134D1C /* ChatVC */,
 				46C211241C59EF5700134D1C /* Login */,
 				46871AB81C4D147100E5A6E8 /* Emoji */,
@@ -522,6 +555,7 @@
 				46CA53881C4A727C00FE42F5 /* Info.plist */,
 				46CA53771C4A727C00FE42F5 /* Supporting Files */,
 				4602A6951C4A809200F4751A /* image */,
+				462568F41C7735630010CDA7 /* Category */,
 			);
 			path = LoopChat;
 			sourceTree = "<group>";
@@ -538,6 +572,8 @@
 				4673A4F71C7569BE0093C66C /* AppDelegate+Parse.h */,
 				4673A4F81C7569BE0093C66C /* AppDelegate+Parse.m */,
 				46CA53781C4A727C00FE42F5 /* main.m */,
+				462568EA1C7734130010CDA7 /* LCMainVC.h */,
+				462568EB1C7734130010CDA7 /* LCMainVC.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -794,11 +830,14 @@
 				464438041C5CA057007F6D5C /* FacialView.m in Sources */,
 				46CA537F1C4A727C00FE42F5 /* ViewController.m in Sources */,
 				464438001C5CA01E007F6D5C /* EMTextView.m in Sources */,
+				462568F71C7735930010CDA7 /* UIImageView+HeadView.m in Sources */,
 				46871AD21C4D1B7F00E5A6E8 /* EMChatTimeCell.m in Sources */,
+				46256AE71C7746760010CDA7 /* ChatListViewController.m in Sources */,
 				46CA537C1C4A727C00FE42F5 /* AppDelegate.m in Sources */,
 				46871AB11C4D140900E5A6E8 /* LCConvertToCommonEmoticonsHelper.m in Sources */,
 				46871AB01C4D140900E5A6E8 /* LocationViewController.m in Sources */,
 				46871AEA1C4D1C0300E5A6E8 /* THProgressView.m in Sources */,
+				462568EC1C7734130010CDA7 /* LCMainVC.m in Sources */,
 				46871AAA1C4D00C700E5A6E8 /* SQChatVC.m in Sources */,
 				46871AE31C4D1B9300E5A6E8 /* EMChatAudioBubbleView.m in Sources */,
 				46871AD41C4D1B7F00E5A6E8 /* EMChatViewCell.m in Sources */,
@@ -815,6 +854,7 @@
 				46871AC81C4D1B6C00E5A6E8 /* MessageReadManager.m in Sources */,
 				46871AC91C4D1B6C00E5A6E8 /* MessageModel.m in Sources */,
 				46871ACA1C4D1B6C00E5A6E8 /* MessageModelManager.m in Sources */,
+				46256AE61C7746760010CDA7 /* ChatListCell.m in Sources */,
 				4602A6EA1C4A80E800F4751A /* DetailRegistersVC.m in Sources */,
 				46CA53791C4A727C00FE42F5 /* main.m in Sources */,
 				46871AE41C4D1B9300E5A6E8 /* EMChatBaseBubbleView.m in Sources */,
@@ -972,7 +1012,65 @@
 				INFOPLIST_FILE = LoopChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LoopChat/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
+					"$(PROJECT_DIR)/LoopChat/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
+				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"DACircularProgress\"",
+					"-l\"EaseMobClientSDKLite_arm64\"",
+					"-l\"EaseMobClientSDKLite_armv7\"",
+					"-l\"EaseMobClientSDKLite_armv7s\"",
+					"-l\"EaseMobClientSDKLite_i386\"",
+					"-l\"EaseMobClientSDKLite_x86_64\"",
+					"-l\"EaseUI\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJRefresh\"",
+					"-l\"MWPhotoBrowser\"",
+					"-l\"MobClickLibrary\"",
+					"-l\"SDWebImage\"",
+					"-l\"iconv\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"stdc++.6\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"AssetsLibrary\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MapKit\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-weak_framework",
+					"-lDACircularProgress",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.XinQuan.LoopChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -994,6 +1092,64 @@
 				INFOPLIST_FILE = LoopChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LoopChat/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
+					"$(PROJECT_DIR)/LoopChat/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"DACircularProgress\"",
+					"-l\"EaseMobClientSDKLite_arm64\"",
+					"-l\"EaseMobClientSDKLite_armv7\"",
+					"-l\"EaseMobClientSDKLite_armv7s\"",
+					"-l\"EaseMobClientSDKLite_i386\"",
+					"-l\"EaseMobClientSDKLite_x86_64\"",
+					"-l\"EaseUI\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJRefresh\"",
+					"-l\"MWPhotoBrowser\"",
+					"-l\"MobClickLibrary\"",
+					"-l\"SDWebImage\"",
+					"-l\"iconv\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"stdc++.6\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"AssetsLibrary\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MapKit\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-weak_framework",
+					"-lDACircularProgress",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.XinQuan.LoopChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
